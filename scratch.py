@@ -62,11 +62,14 @@ def event():
                     handler(value)
         elif current_event[1] == 'sensor-update':
             sensor, value = current_event[2:4]
-            for x in (None, sensor):
-                if x in _sensor_handlers and callable(_sensor_handlers[x]):
-                    _sensor_handlers[x](sensor,value)
+            for regex, handler in _sensor_handlers.iteritems():
+                if callable(handler) and re.match(regex, sensor) != None:
+                    handler(sensor, value)
+            #for x in (None, sensor):
+            #    if x in _sensor_handlers and callable(_sensor_handlers[x]):
+            #        _sensor_handlers[x](sensor,value)
         event_queue.task_done()
-    time.sleep(0.001)
+    time.sleep(0.0001)
     return True
 
 def send():
@@ -75,7 +78,7 @@ def send():
         sck.send(message)
         #print('Sending', message)
         output.task_done()
-    time.sleep(0.001)
+    time.sleep(0.0001)
     return True
 
 def recv():
@@ -106,7 +109,7 @@ def recv():
                 value = True
             elif value == "false":
                 value = False
-            event_queue.put((0,'broadcast',value))
+            event_queue.put((1,'broadcast',value))
         if msg[0] == 'sensor-update':
             sensor = msg[1][1:-1]
             value = msg[2]

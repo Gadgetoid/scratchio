@@ -8,11 +8,6 @@ sck = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sck.connect(('127.0.0.1',42001))
 sck.settimeout(0.5)
 
-'''
- A scatch message consists of three zeros
- followed by the packet length
-'''
-
 output = PriorityQueue()
 event_queue = PriorityQueue()
 handler_queue = Queue()

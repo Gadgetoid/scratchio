@@ -40,6 +40,8 @@ To send a message to the plugin's target library, format it like so:
 pibrella:light:on()
 ```
 
+![Scratch Example](img/example.png)
+
 You can also use parameters, like so:
 
 ```

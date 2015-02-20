@@ -61,3 +61,12 @@ it a value. To give variables to Pibrella you should prefix them with
 pibrella:my_light
 ```
 
+##Slightly more advanced example
+
+ScratchIO is powerful enough to handle constants on your target library,
+and call all the methods you might if you were directly using Python.
+
+This example shows RPi.GPIO being loaded, an output being set up
+and then turned on and off. This blinks the orange LED on Pibrella!
+
+![Scratch GPIO](img/gpio.png)

@@ -9,7 +9,7 @@ sck.connect(('127.0.0.1',42001))
 sck.settimeout(0.5)
 
 output = PriorityQueue()
-event_queue = PriorityQueue()
+event_queue = Queue()
 handler_queue = Queue()
 
 buf = []

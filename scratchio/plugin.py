@@ -19,6 +19,7 @@ class Plugin():
                 if hasattr(obj, path):
                     obj = getattr(obj, path)
                     if idx == len(message[1:])-1 and callable(obj):
+                        print('Calling with args', path, args)
                         obj(*args)
 
     def _parse_args(self, path):
@@ -36,12 +37,15 @@ class Plugin():
     def _parse_var(self, var):
         var = var.strip()
         parsed = var
+        print('Parsing var',var)
         if var.startswith('%') and var[1:] in self._vars:
             parsed = self._vars[var[1:]]
         elif var.startswith('"') and var.endswith('"'):
             parsed = var[1:-1]
         elif var.startswith("'") and var.endswith("'"):
             parsed = var[1:-1]
+        elif hasattr(self.target,var):
+            parsed = getattr(self.target,var)
         else:
             try:
                 if str(int(var)) == var:

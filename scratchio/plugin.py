@@ -40,7 +40,7 @@ class Plugin():
             parsed = self._vars[var[1:]]
         elif var.startswith('"') and var.endswith('"'):
             parsed = var[1:-1]
-        elif var.starswith("'") and var.endswith("'"):
+        elif var.startswith("'") and var.endswith("'"):
             parsed = var[1:-1]
         else:
             try:

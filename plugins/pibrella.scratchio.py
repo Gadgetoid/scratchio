@@ -2,10 +2,18 @@ class Plugin():
     def __init__(self, scratch):
         import pibrella
         self.pibrella = pibrella
+
+        def input_handler(pin):
+            scratch.sensor_update('pibrella_button',pin.read() == 1, 0)
+            scratch.broadcast('pibrella:update')
+        self.pibrella.button.changed(input_handler)
+ 
         @scratch.on_message('^pibrella:')
         def handle_message(message):
             #print(message)
             message = message.split(':')
+            if len(message) < 4:
+                return False
             _collection = message[1]
             _item       = message[2]
             _function   = message[3].replace('()','')

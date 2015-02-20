@@ -2,6 +2,7 @@ class Plugin():
     def __init__(self, scratch):
         self._vars = {}
 
+        print("Registering handlers for {}".format(self.name.lower()))
         @scratch.on_change('^{}:'.format(self.name.lower()))
         def handle_update(sensor, value):
             sensor = sensor.split(':')[1]
@@ -20,7 +21,12 @@ class Plugin():
                     obj = getattr(obj, path)
                     if idx == len(message[1:])-1 and callable(obj):
                         print('Calling with args', path, args)
-                        obj(*args)
+                        try:
+                            obj(*args)
+                        except RuntimeError as e:
+                            print('Failed:',e.message)
+                        except ValueError as e:
+                            print('Failed:',e.message)
 
     def _parse_args(self, path):
         args = []
@@ -37,7 +43,7 @@ class Plugin():
     def _parse_var(self, var):
         var = var.strip()
         parsed = var
-        print('Parsing var',var)
+        #print('Parsing var',var)
         if var.startswith('%') and var[1:] in self._vars:
             parsed = self._vars[var[1:]]
         elif var.startswith('"') and var.endswith('"'):

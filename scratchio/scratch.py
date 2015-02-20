@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import time, socket, atexit, signal, re
+import time, socket, atexit, signal, re, shlex
 from pim import AsyncWorker, StoppableThread
 from array import array
 from Queue import PriorityQueue, Queue
@@ -55,6 +55,7 @@ def event():
             _sensor_handlers[path] = handler
     if not event_queue.empty():
         current_event = event_queue.get()
+        #print('Scratch handling',current_event)
         if current_event[1] == 'broadcast':
             value = current_event[2]
             for regex, handler in _broadcast_handlers.iteritems():
@@ -90,45 +91,49 @@ def recv():
     if header:
         header = map(ord, header)
         msg_len = header[0] << 24 | header[1] << 16 | header[2] << 8 | header[3]
+        #print('Getting message, len',msg_len)
         msg = sck.recv(msg_len)
-        msg = msg.split(' ')
+        #print("GOt message", msg)
+        #msg = msg.replace('""','\"')
+        msg = shlex.split(msg)
         if msg[0] == 'broadcast':
-            value = msg[1][1:-1]
-            value = value.replace('""','"')
-            try:
-                if value.find('.') and str(float(value)) == value:
-                    value = float(value)
-            except ValueError:
-                pass
-            try:
-                if str(int(value)) == value:
-                    value = int(value)
-            except ValueError:
-                pass
-            if value == "true":
-                value = True
-            elif value == "false":
-                value = False
-            event_queue.put((1,'broadcast',value))
-        if msg[0] == 'sensor-update':
-            sensor = msg[1][1:-1]
-            value = msg[2]
-            if value.startswith('"'):
-                value = value[1:-1]
-                if value == "true":
-                    value = True
-                if value == "false":
-                    value = False
-            elif value.find('.') != -1:
-                value = float(value)
-            else:
-                value = int(value)
+            value = _parse_value(msg[1])
+            event_queue.put((0,'broadcast',value))
+        elif msg[0] == 'sensor-update':
+            sensor = msg[1]
+            value = _parse_value(msg[2])
             event_queue.put((0,'sensor-update',sensor,value))
             #print(msg)
     return True
 
-def on_message(message = None):
+def _parse_value(value):
+    if value.lower() in ["false","true"]:
+        value = ["false","true"].index(value.lower())
+    try:
+        if value.find('.') and str(float(value)) == value:
+            value = float(value)
+    except ValueError:
+        pass
+    try:
+        if str(int(value)) == value:
+            value = int(value)
+    except ValueError:
+        pass
+    return value
+
+def get_arg(args,arg,default):
+    if arg in args:
+        return args[arg]
+    else:
+        return default
+
+def on_message(message, **kwargs):
+    auto_parse = get_arg(kwargs,'auto_parse',True)
+    split      = get_arg(kwargs,'split',':')
     def register(handler):
+        #if auto_parse:
+        #   def new_handler(message):
+        #       handler(map(strip,message.split(split)))
         handler_queue.put(('broadcast', message, handler))
         #global _broadcast_handlers
         #_broadcast_handlers[message] = handler

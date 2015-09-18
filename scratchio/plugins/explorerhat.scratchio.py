@@ -2,6 +2,7 @@ import plugin
 class Plugin(plugin.Plugin):
     def __init__(self, scratch):
         import explorerhat
+        self.name = 'explorerhat'
         self.target = explorerhat
         plugin.Plugin.__init__(self, scratch)
 

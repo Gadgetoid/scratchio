@@ -7,6 +7,7 @@ from Queue import PriorityQueue, Queue
 sck = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sck.connect(('127.0.0.1',42001))
 sck.settimeout(0.5)
+print("Connected...")
 
 output = PriorityQueue()
 event_queue = Queue()
@@ -110,7 +111,7 @@ def _parse_value(value):
     if value.lower() in ["false","true"]:
         value = ["false","true"].index(value.lower())
     try:
-        if value.find('.') and str(float(value)) == value:
+        if str(value).find('.') and str(float(value)) == value:
             value = float(value)
     except ValueError:
         pass

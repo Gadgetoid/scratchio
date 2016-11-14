@@ -70,3 +70,13 @@ This example shows RPi.GPIO being loaded, an output being set up
 and then turned on and off. This blinks the orange LED on Pibrella!
 
 ![Scratch GPIO](img/gpio.png)
+
+##Enviro pHAT
+
+Variables coming from your HAT or pHAT into the Scratch world will pop up as a `sensor value`. You should go into `Sensing` and look at the drop down list for the `sensor` block.
+
+Plugins with inputs will also broadcast an `update` message prefixed with their name. For Enviro pHAT this would be `envirophat:update`.
+
+With just a handful of blocks, you can make Scratch shout what temperature it is:
+
+![Enviro pHAT temperature](img/scratch-envirophat.png)

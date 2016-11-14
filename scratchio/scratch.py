@@ -30,12 +30,11 @@ def broadcast(message, priority=10):
     output.put((priority,to_scratch_message("broadcast \"{}\"".format(message))))
 
 def sensor_update(sensor, value, priority=10):
-    value = str(value)
     if isinstance(value, str):
         value = value.replace('"','""')
         output.put((priority,to_scratch_message("sensor-update \"{}\" \"{}\"".format(sensor, value))))
     elif isinstance(value, int) or isinstance(value, float):
-        output.put((priority,to_scratch_message("sensor-update \"{}\" {}".format(sensor, str(value)))))
+        output.put((priority,to_scratch_message("sensor-update \"{}\" {}".format(sensor, value))))
 
 def to_scratch_message(cmd):
     # Taken from scratra, Taken from chalkmarrow

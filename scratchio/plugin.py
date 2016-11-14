@@ -1,6 +1,14 @@
+import atexit
+import pim
+
 class Plugin():
     def __init__(self, scratch):
         self._vars = {}
+        self._scratch = scratch
+
+        self._thread = pim.AsyncWorker(self.run)
+        atexit.register(self._thread.stop)
+        self._thread.start()
 
         print("Registering handlers for {}".format(self.name.lower()))
         @scratch.on_change('^{}:'.format(self.name.lower()))
@@ -27,6 +35,9 @@ class Plugin():
                             print('Failed:',e.message)
                         except ValueError as e:
                             print('Failed:',e.message)
+
+    def run(self):
+        pass
 
     def _parse_args(self, path):
         args = []

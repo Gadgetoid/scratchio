@@ -1,7 +1,10 @@
+import time
 import plugin
+
 class Plugin(plugin.Plugin):
     def __init__(self, scratch):
         import explorerhat
+
         self.name = 'explorerhat'
         self.target = explorerhat
         plugin.Plugin.__init__(self, scratch)
@@ -23,3 +26,11 @@ class Plugin(plugin.Plugin):
         self.target.input.three.changed(lambda x: input_handler('three',x))
         self.target.input.four.changed(lambda x: input_handler('four',x))
 
+    def run(self):
+        analog = self.target.analog.read()
+        for key in analog.keys():
+            #print('explorerhat_analog_{} = {}'.format(key, analog[key]))
+            self._scratch.sensor_update('explorerhat_analog_{}'.format(key), analog[key], 0)
+
+        self._scratch.broadcast('explorerhat:update')
+        time.sleep(1)

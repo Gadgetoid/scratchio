@@ -1,5 +1,6 @@
-#ScratchIO
-##An extensible, plugin-based Scratch IO framework
+# ScratchIO
+
+## An extensible, plugin-based Scratch IO framework
 
 ScratchIO is an attempt to create a flexible, open and powerful
 framework for communicating with Scratch using the remote sensors protocol.
@@ -9,7 +10,7 @@ a single device. Plugins can be derived from the common plugin class, which
 grants them automatic tracking of variables and parsing of commands against
 their target library.
 
-##Super Simple Example
+## Super Simple Example
 
 First, fire up Scratch and enable remote sensor connections by right
 clicking on the "sensor value" block under Sensing.
@@ -61,7 +62,7 @@ it a value. To give variables to Pibrella you should prefix them with
 pibrella:my_light
 ```
 
-##Slightly more advanced example
+## Slightly more advanced example
 
 ScratchIO is powerful enough to handle constants on your target library,
 and call all the methods you might if you were directly using Python.
@@ -71,7 +72,7 @@ and then turned on and off. This blinks the orange LED on Pibrella!
 
 ![Scratch GPIO](img/gpio.png)
 
-##Enviro pHAT
+## Enviro pHAT
 
 Variables coming from your HAT or pHAT into the Scratch world will pop up as a `sensor value`. You should go into `Sensing` and look at the drop down list for the `sensor` block.
 
